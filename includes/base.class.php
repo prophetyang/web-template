@@ -17,7 +17,7 @@ class Base {
         if (is_array($logString)) {
             $outputString = "[".$reflector->getName()."] Dump array start |" . $this->getBaseFileName($reflector) . ":".$line;
             $this->m_debugObj->writeLog($outputString);
-            $this->dump_array($logString, $line, "");
+            $this->dump_array($reflector, $logString, $line, "");
             $outputString = "[".$reflector->getName()."] Dump array end |" . $this->getBaseFileName($reflector) .":".$line;
             $this->m_debugObj->writeLog($outputString);
         } else {
@@ -30,12 +30,11 @@ class Base {
         return basename($reflector->getFileName());
     }
 
-    private function dump_array($arrayObj, $line, $tab) {
-        $reflector = new ReflectionClass(get_class($this));
+    private function dump_array($reflector, $arrayObj, $line, $tab) {
         foreach ($arrayObj as $key => $value) {
             if (is_array($value)) {
                 $tab .= " ";
-                $this->dump_array($value, $line, $tab);
+                $this->dump_array($reflector, $value, $line, $tab);
             } else {
                 $outputString = "[".$reflector->getName()."]". $tab . "['$key'] = $value " . " | " . $this->getBaseFileName($reflector) .":".$line;
                 $this->m_debugObj->writeLog($outputString);
